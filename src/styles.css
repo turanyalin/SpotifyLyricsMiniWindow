@@ -1,0 +1,361 @@
+:root {
+  color: rgba(255, 255, 255, 0.92);
+  background: transparent;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+button {
+  border: 0;
+  font: inherit;
+}
+
+.overlay-shell {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 18px;
+  pointer-events: none;
+}
+
+.lyric-panel {
+  width: min(520px, calc(100vw - 36px));
+  min-height: 178px;
+  padding: 12px 18px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(18, 18, 18, 0.82), rgba(24, 28, 30, 0.58)),
+    rgba(12, 14, 16, 0.66);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(22px) saturate(1.25);
+  pointer-events: auto;
+}
+
+.window-titlebar {
+  display: flex;
+  align-items: center;
+  min-height: 18px;
+  margin-bottom: 10px;
+}
+
+.traffic-lights {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.traffic-light {
+  width: 12px;
+  height: 12px;
+  display: block;
+  padding: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.16);
+  transition: filter 140ms ease, transform 140ms ease;
+}
+
+.traffic-light:hover {
+  filter: brightness(1.08) saturate(1.08);
+}
+
+.traffic-light:active {
+  transform: scale(0.92);
+}
+
+.traffic-light.close {
+  background: #ff5f57;
+}
+
+.traffic-light.minimize {
+  background: #ffbd2e;
+}
+
+.traffic-light.maximize {
+  background: #28c840;
+}
+
+.track-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  min-height: 34px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.drag-handle {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: move;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.cover-art {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.62);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.cover-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.track-copy {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.track-title,
+.track-artist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.track-artist {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.transport-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.control-button {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.74);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.control-button:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.control-button:active {
+  transform: scale(0.94);
+}
+
+.control-button.primary {
+  background: #1ed760;
+  color: #07140b;
+}
+
+.control-button.primary:hover {
+  background: #35e274;
+  color: #07140b;
+}
+
+.lyrics-stack {
+  display: grid;
+  grid-template-rows: 28px minmax(42px, auto) 28px;
+  gap: 3px;
+  margin-top: 16px;
+  contain: layout paint;
+}
+
+.lyric-line {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: opacity, transform, filter;
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lyric-line.has-text {
+  opacity: 1;
+  transform: translateY(0);
+  animation: lyric-enter 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lyric-line.previous,
+.lyric-line.next {
+  font-size: 14px;
+  line-height: 28px;
+  color: rgba(255, 255, 255, 0.48);
+  filter: blur(0.1px);
+}
+
+.lyric-line.previous {
+  transform: translateY(-4px);
+  animation-name: lyric-enter-from-top;
+}
+
+.lyric-line.current {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.98);
+  text-wrap: balance;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+  animation-name: lyric-enter-current;
+}
+
+@keyframes lyric-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes lyric-enter-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-4px);
+    filter: blur(0.1px);
+  }
+}
+
+@keyframes lyric-enter-current {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+    filter: blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.empty-state p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 14px;
+}
+
+.icon-button,
+.status-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #1ed760;
+  color: #07140b;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.status-button {
+  max-width: 100%;
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.status-button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .overlay-shell {
+    padding: 12px;
+  }
+
+  .lyric-panel {
+    width: calc(100vw - 24px);
+    padding: 14px;
+  }
+
+  .lyric-line.current {
+    font-size: 20px;
+  }
+}
