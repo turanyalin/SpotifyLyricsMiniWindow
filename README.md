@@ -23,6 +23,7 @@ The app requests `user-read-playback-state`, polls Spotify every 2 seconds, fetc
 
 ## Notes
 
+- Packaged login is not fully wired yet. Run with npm run tauri dev for now.
 - Spotify must be actively playing on one of your devices.
 - LRCLIB does not have synced lyrics for every song. The overlay will show a small status message when synced lyrics are unavailable.
 - For production builds, register the production redirect URI you intend to use and set `VITE_SPOTIFY_REDIRECT_URI` accordingly.
